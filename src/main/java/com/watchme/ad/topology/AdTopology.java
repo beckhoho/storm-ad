@@ -5,6 +5,7 @@ import com.watchme.ad.bolt.AdEsperBolt;
 import com.watchme.ad.bolt.AdRulesBolt;
 import com.watchme.ad.bolt.AdSortBolt;
 import com.watchme.ad.bolt.SaveToRedisCloudBolt;
+import com.watchme.ad.util.MessageScheme;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
@@ -17,7 +18,6 @@ import backtype.storm.utils.Utils;
 import storm.kafka.BrokerHosts;
 import storm.kafka.KafkaSpout;
 import storm.kafka.SpoutConfig;
-import storm.kafka.StringScheme;
 import storm.kafka.ZkHosts;
 
 public class AdTopology {
@@ -28,7 +28,7 @@ public class AdTopology {
 			BrokerHosts brokerHosts = new ZkHosts(kafkaZookeeper);
 
 			SpoutConfig kafkaConfig = new SpoutConfig(brokerHosts, "ad-topic2", "/ad2", "id");
-			kafkaConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
+			kafkaConfig.scheme = new SchemeAsMultiScheme(new MessageScheme());
 			kafkaConfig.zkServers = ImmutableList.of("master", "slave1", "slave2");
 			kafkaConfig.zkPort = 2181;
 			KafkaSpout kafkaSpout = new KafkaSpout(kafkaConfig);
