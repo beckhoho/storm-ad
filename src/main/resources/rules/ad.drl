@@ -1,0 +1,21 @@
+package com.watchme.drools_esper.ad;
+
+import com.watchme.ad.bean.UserAdPolicy;
+import com.watchme.ad.bean.AdPolicy;
+import com.watchme.ad.bean.MessageToRedis;
+import com.watchme.ad.util.DataType;
+import java.util.List;
+
+rule "ad-tactics"
+	// 投放总次数小于10， 每天推送次数小于等于3
+	salience 100
+	lock-on-active true
+	when
+		$userAdPolicy : UserAdPolicy(pushFlag == false || pushFlag == null);
+		$adPolicy : AdPolicy(dayPutNum <= 10 && putNum <= 3) from $userAdPolicy.adPolicyList;	
+	then
+		$userAdPolicy.setPushFlag(true);
+		List<MessageToRedis> redisRecords = $userAdPolicy.getMessagesToRedis();
+		redisRecords.add(new MessageToRedis($userAdPolicy.getUserId(),$adPolicy.getUrl(),DataType.STRING));
+		update($userAdPolicy);
+end
