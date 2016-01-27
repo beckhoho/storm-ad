@@ -16,6 +16,6 @@ rule "ad-tactics"
 	then
 		$userAdPolicy.setPushFlag(true);
 		List<MessageToRedis> redisRecords = $userAdPolicy.getMessagesToRedis();
-		redisRecords.add(new MessageToRedis($userAdPolicy.getUserId(),$adPolicy.getUrl(),DataType.STRING));
+		redisRecords.add(new MessageToRedis($userAdPolicy.getCurId(),$adPolicy.getUrl(),DataType.STRING));
 		update($userAdPolicy);
 end
