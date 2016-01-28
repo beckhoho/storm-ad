@@ -5,7 +5,7 @@ import java.io.Serializable;
 import com.watchme.ad.util.DataType;
 
 
-public class MessageToRedis  implements Serializable{
+public class MessageToRedis implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String key;
     private String value;

@@ -1,8 +1,10 @@
 package com.watchme.ad.bean;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class AdPolicy {
+public class AdPolicy implements Serializable{
+	private static final long serialVersionUID = 1L;
 	// 投放总次数
 	private int putNum;
 	// 每天推送次数

@@ -29,6 +29,7 @@ public class SerializationUtil {
 			byte[] bytes = baos.toByteArray();
 			return bytes;
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -45,8 +46,9 @@ public class SerializationUtil {
 			bais = new ByteArrayInputStream(bytes);
 			ObjectInputStream ois = new ObjectInputStream(bais);
 			return ois.readObject();
+			
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 		return null;
 	}

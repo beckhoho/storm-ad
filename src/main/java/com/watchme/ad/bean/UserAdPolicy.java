@@ -1,9 +1,11 @@
 package com.watchme.ad.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserAdPolicy {
+public class UserAdPolicy implements Serializable{
+	private static final long serialVersionUID = 1L;
 	// 唯一标识
 	private String curId;
 	// 用户名

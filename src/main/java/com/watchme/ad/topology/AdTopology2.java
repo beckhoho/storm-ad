@@ -2,6 +2,7 @@ package com.watchme.ad.topology;
 
 import com.watchme.ad.bolt.AdEsperBolt;
 import com.watchme.ad.bolt.AdGet2RedisBolt;
+import com.watchme.ad.bolt.AdGet2RedisCloudBolt;
 import com.watchme.ad.bolt.AdRulesBolt;
 import com.watchme.ad.bolt.AdSortBolt;
 import com.watchme.ad.bolt.SaveToRedisCloudBolt;
@@ -16,21 +17,28 @@ import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.utils.Utils;
 
 public class AdTopology2 {
-	
+
+	private static AdSpout ADSPOUT = new AdSpout();
+	private static AdGet2RedisBolt ADGET2REDISBOLT = new AdGet2RedisBolt();
+	private static AdGet2RedisCloudBolt ADGET2REDISCLOUDBOLT = new AdGet2RedisCloudBolt();
+	private static AdSortBolt ADSORTBOLT = new AdSortBolt();
+	private static AdEsperBolt ADESPERBOLT = new AdEsperBolt();
+	private static AdRulesBolt ADRULESBOLT = new AdRulesBolt();
+	private static SaveToRedisCloudBolt SAVETOREDISCLOUDBOLT = new SaveToRedisCloudBolt();
 
 	public static void main(String[] args) {
 		try {
-			
+
 			TopologyBuilder builder = new TopologyBuilder();
-			builder.setSpout("adSpout", new AdSpout(), 1);
-			builder.setBolt("adGet2RedisCloudBolt", new AdGet2RedisBolt(),1).shuffleGrouping("adSpout");
-			builder.setBolt("adSortBolt", new AdSortBolt(),1).shuffleGrouping("adGet2RedisCloudBolt");
-			builder.setBolt("adEsperBolt", new AdEsperBolt(),1).shuffleGrouping("adSortBolt");
-			builder.setBolt("adRulesBolt", new AdRulesBolt(),1).shuffleGrouping("adEsperBolt");		
-			builder.setBolt("saveToRedisBolt", new SaveToRedisCloudBolt(),1).shuffleGrouping("adRulesBolt");	
-			
+			builder.setSpout("adSpout", ADSPOUT, 1);
+			builder.setBolt("adGet2RedisBolt", ADGET2REDISCLOUDBOLT, 1).shuffleGrouping("adSpout");
+			builder.setBolt("adSortBolt", ADSORTBOLT, 1).shuffleGrouping("adGet2RedisBolt");
+			builder.setBolt("adEsperBolt", ADESPERBOLT, 1).shuffleGrouping("adSortBolt");
+			builder.setBolt("adRulesBolt", ADRULESBOLT, 1).shuffleGrouping("adEsperBolt");
+			builder.setBolt("saveToRedisBolt", SAVETOREDISCLOUDBOLT, 1).shuffleGrouping("adRulesBolt");
+
 			Config config = new Config();
-			config.setDebug(true); 
+			config.setDebug(true);
 			if (args != null && args.length > 0) {
 				config.setNumWorkers(1);
 				StormSubmitter.submitTopology(args[0], config, builder.createTopology());
