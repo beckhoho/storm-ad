@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 
 import com.watchme.ad.bean.MessageToRedis;
 import com.watchme.ad.bean.UserAdPolicy;
+import com.watchme.ad.util.JedisUtil;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -20,8 +21,8 @@ public class SaveToRedisCloudBolt extends BaseRichBolt {
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger logger = org.slf4j.LoggerFactory.getLogger(SaveToRedisCloudBolt.class);
-	private static final String LOG_ENTRY = "str";
-	private int expireTime = 3600 * 24 * 7;// 過期時間 7天
+	private static final String AD_ENTRY = "str";
+	private int expireTime = 3600 * 24 * 1;// 過期時間 1天
 	private OutputCollector collector;
 
 	private Jedis jedis;
@@ -46,6 +47,8 @@ public class SaveToRedisCloudBolt extends BaseRichBolt {
 				jedis.expire(key, expireTime);
 			} catch (Exception e) {
 				throw new Exception(e.getMessage() + " (error message is：" + message + ")");
+			} finally {
+
 			}
 		}
 	}
@@ -57,16 +60,16 @@ public class SaveToRedisCloudBolt extends BaseRichBolt {
 	@Override
 	public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
 		this.collector = collector;
-		this.jedis = new Jedis("192.168.75.131", 6379);
+		this.jedis = JedisUtil.getPool("192.168.75.131", 6379).getResource();
 	}
 
 	@Override
 	public void execute(Tuple input) {
 		System.out.println("------------------->>>>>>>>>>>>>>>>进入SaveToRedisCloudBolt..........");
-		//开始时间
-		long startTime=System.currentTimeMillis();
-		
-		UserAdPolicy entry = (UserAdPolicy) input.getValueByField(LOG_ENTRY);
+		// 开始时间
+		long startTime = System.currentTimeMillis();
+
+		UserAdPolicy entry = (UserAdPolicy) input.getValueByField(AD_ENTRY);
 		List<MessageToRedis> redisRecords = entry.getMessagesToRedis();
 		try {
 			if (redisRecords.isEmpty())
@@ -76,16 +79,15 @@ public class SaveToRedisCloudBolt extends BaseRichBolt {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		} finally {
-			
-			
-			//结束时间
-			long endTime=System.currentTimeMillis();
-			float excTime=(float)(endTime-startTime)/1000;
-			System.out.println("SaveToRedisCloudBolt执行时间："+excTime+"s");
-			
+
+			// 结束时间
+			long endTime = System.currentTimeMillis();
+			float excTime = (float) (endTime - startTime) / 1000;
+			System.out.println("SaveToRedisCloudBolt执行时间：" + excTime + "s");
+
 			collector.ack(input);
 		}
-		
+
 	}
 
 }

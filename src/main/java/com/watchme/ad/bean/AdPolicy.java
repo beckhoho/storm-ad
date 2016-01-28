@@ -16,7 +16,7 @@ public class AdPolicy {
 	// 广告url
 	private String url;
 	// 排序
-	private int sortNum;
+	private int order;
 
 	public int getPutNum() {
 		return putNum;
@@ -66,12 +66,12 @@ public class AdPolicy {
 		this.url = url;
 	}
 
-	public int getSortNum() {
-		return sortNum;
+	public int getOrder() {
+		return order;
 	}
 
-	public void setSortNum(int sortNum) {
-		this.sortNum = sortNum;
+	public void setOrder(int order) {
+		this.order = order;
 	}
 
 }

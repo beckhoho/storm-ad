@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 
 import com.watchme.ad.bean.MessageToRedis;
 import com.watchme.ad.bean.UserAdPolicy;
+import com.watchme.ad.util.JedisUtil;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -51,7 +52,7 @@ public class SaveToRedisBolt extends BaseRichBolt {
 	@Override
 	public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
 		this.collector = collector;
-		this.jedis = new Jedis("192.168.75.131", 6379);
+		this.jedis = JedisUtil.getPool("192.168.75.131", 6379).getResource();
 		this.pipeline = this.jedis.pipelined();
 	}
 
