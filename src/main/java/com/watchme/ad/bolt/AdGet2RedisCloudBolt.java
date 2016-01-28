@@ -59,12 +59,24 @@ public class AdGet2RedisCloudBolt extends BaseRichBolt {
 			String curId = values[0]; // 唯一流水
 			String userId = values[1]; // 用户名
 			
-			byte[] bs = jedis.get(userId.getBytes());
-			adPolicyList = (List<AdPolicy>) SerializationUtil.deserialize(bs);
+			System.out.println("userId = "+userId+" , userId.getBytes = "+userId.getBytes());
 			
+			byte[] bs = jedis.get(userId.getBytes());
+			System.out.println("adPolicyList.size = "+adPolicyList.size());
+			
+			adPolicyList = (List<AdPolicy>) SerializationUtil.deserialize(bs);
+			System.out.println("adPolicyList.size = "+adPolicyList.size());
+			System.out.println("URL = " + adPolicyList.get(0).getUrl());
 			userAdPolicy.setCurId(curId);
 			userAdPolicy.setUserId(userId);
 			userAdPolicy.setAdPolicyList(adPolicyList);
+			
+			System.out.println("=======================原始数据============================");
+			for (int i = 0; i < adPolicyList.size(); i++) {
+				System.out.println("计数=" + i + ",内容：userId=" + userId + ",putNum=" + adPolicyList.get(i).getPutNum()
+						+ ",dayPutNum=" + adPolicyList.get(i).getDayPutNum() + ",url=" + adPolicyList.get(i).getUrl());
+			}
+			System.out.println("=======================原始数据============================");
 
 			collector.emit(new Values(userAdPolicy));
 
