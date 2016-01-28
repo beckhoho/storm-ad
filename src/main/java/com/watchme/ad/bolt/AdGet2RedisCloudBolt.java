@@ -61,12 +61,8 @@ public class AdGet2RedisCloudBolt extends BaseRichBolt {
 			
 			System.out.println("userId = "+userId+" , userId.getBytes = "+userId.getBytes());
 			
-			byte[] bs = jedis.get(userId.getBytes());
-			System.out.println("adPolicyList.size = "+adPolicyList.size());
-			
+			byte[] bs = jedis.get(userId.getBytes());		
 			adPolicyList = (List<AdPolicy>) SerializationUtil.deserialize(bs);
-			System.out.println("adPolicyList.size = "+adPolicyList.size());
-			System.out.println("URL = " + adPolicyList.get(0).getUrl());
 			userAdPolicy.setCurId(curId);
 			userAdPolicy.setUserId(userId);
 			userAdPolicy.setAdPolicyList(adPolicyList);
