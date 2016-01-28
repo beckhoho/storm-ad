@@ -1,7 +1,7 @@
 package com.watchme.ad.topology;
 
 import com.watchme.ad.bolt.AdEsperBolt;
-import com.watchme.ad.bolt.AdGet2RedisCloudBolt;
+import com.watchme.ad.bolt.AdGet2RedisBolt;
 import com.watchme.ad.bolt.AdRulesBolt;
 import com.watchme.ad.bolt.AdSortBolt;
 import com.watchme.ad.bolt.SaveToRedisCloudBolt;
@@ -23,7 +23,7 @@ public class AdTopology2 {
 			
 			TopologyBuilder builder = new TopologyBuilder();
 			builder.setSpout("adSpout", new AdSpout(), 1);
-			builder.setBolt("adGet2RedisCloudBolt", new AdGet2RedisCloudBolt(),1).shuffleGrouping("adSpout");
+			builder.setBolt("adGet2RedisCloudBolt", new AdGet2RedisBolt(),1).shuffleGrouping("adSpout");
 			builder.setBolt("adSortBolt", new AdSortBolt(),1).shuffleGrouping("adGet2RedisCloudBolt");
 			builder.setBolt("adEsperBolt", new AdEsperBolt(),1).shuffleGrouping("adSortBolt");
 			builder.setBolt("adRulesBolt", new AdRulesBolt(),1).shuffleGrouping("adEsperBolt");		

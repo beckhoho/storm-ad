@@ -17,6 +17,7 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
+import backtype.storm.tuple.Values;
 
 /**
  * 排序bolt
@@ -52,7 +53,9 @@ public class AdSortBolt extends BaseRichBolt {
 		 * 这里简单的通过order字段来排序
 		 */
 		Collections.sort(adPolicys, new AdComparator<AdPolicy>());
-
+		
+		collector.emit(new Values(entry));
+		
 		// 结束时间
 		long endTime = System.currentTimeMillis();
 		float excTime = (float) (endTime - startTime) / 1000;

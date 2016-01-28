@@ -52,7 +52,7 @@ public class AdGet2RedisCloudBolt extends BaseRichBolt {
 		data = data.trim();
 		if (!"".equals(data) && data != null) {
 
-			final UserAdPolicy userAdPolicy = new UserAdPolicy();
+			UserAdPolicy userAdPolicy = new UserAdPolicy();
 			List<AdPolicy> adPolicyList = new ArrayList<AdPolicy>();
 
 			String[] values = data.split("\\$");
