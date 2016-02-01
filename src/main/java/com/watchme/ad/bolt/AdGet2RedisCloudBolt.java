@@ -116,7 +116,13 @@ public class AdGet2RedisCloudBolt extends BaseRichBolt {
 				adPolicy.setPutStartDate(adPBean.getPutStartDate());
 				adPolicy.setType(adPBean.getType());
 				adPolicy.setUrl(adPBean.getUrl());
-
+				
+				//这里再获取截至现在的次数信息
+				int curDayPutNum = 3;
+				int curPutNum = 20;
+				adPolicy.setCurDayPutNum(curDayPutNum);
+				adPolicy.setCurPutNum(curPutNum);
+				
 				adPolicyList.add(adPolicy);
 			}
 		}

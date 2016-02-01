@@ -23,6 +23,10 @@ public class AdPolicy implements Serializable {
 	private String url;// URL
 	private int order;// 排序
 
+	// 新增字段
+	private int curDayPutNum;// （截至现在）当天已投放次数
+	private int curPutNum;// （截至现在）投放次数
+
 	public String getGroupId() {
 		return groupId;
 	}
@@ -149,6 +153,22 @@ public class AdPolicy implements Serializable {
 
 	public void setOrder(int order) {
 		this.order = order;
+	}
+
+	public int getCurDayPutNum() {
+		return curDayPutNum;
+	}
+
+	public void setCurDayPutNum(int curDayPutNum) {
+		this.curDayPutNum = curDayPutNum;
+	}
+
+	public int getCurPutNum() {
+		return curPutNum;
+	}
+
+	public void setCurPutNum(int curPutNum) {
+		this.curPutNum = curPutNum;
 	}
 
 }

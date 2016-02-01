@@ -12,7 +12,7 @@ rule "ad-tactics"
 	lock-on-active true
 	when
 		$userAdPolicy : UserAdPolicy(pushFlag == false || pushFlag == null);
-		$adPolicy : AdPolicy(dayPutNum <= 10 && putNum <= 3) from $userAdPolicy.adPolicyList;	
+		$adPolicy : AdPolicy(curDayPutNum <= dayPutNum && curPutNum <= putNum) from $userAdPolicy.adPolicyList;	
 	then
 		$userAdPolicy.setPushFlag(true);
 		List<MessageToRedis> redisRecords = $userAdPolicy.getMessagesToRedis();

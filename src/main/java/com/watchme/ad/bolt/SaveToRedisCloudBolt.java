@@ -66,7 +66,7 @@ public class SaveToRedisCloudBolt extends BaseRichBolt {
 			try {
 				switch (message.getType()) {
 				case STRING:
-					JedisServer.hsetItem(0, "adURL", key, message.getValue().getBytes());
+					JedisServer.hsetItem(0, "ad-url", key, message.getValue().getBytes());
 					break;
 				default:
 					break;
