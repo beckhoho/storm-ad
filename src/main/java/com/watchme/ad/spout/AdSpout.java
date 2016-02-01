@@ -46,14 +46,14 @@ public class AdSpout extends BaseRichSpout {
 	public List<String> getJsonObj()
     {
         List<String> list=new ArrayList<String>();
-        String str1="11001100$22100120$oss1";
-        String str2="11001101$22100121$oss2";
-        String str3="11001102$22100122$oss3";
-        String str4="11001103$22100123$oss4";
-        String str5="11001104$22100124$oss5";
-        String str6="11001105$22100125$oss6";
-        String str7="11001106$22100126$oss7";
-        String str8="11001107$22100127$oss8";
+        String str1="tt08980000000743$08980000000743$oss1";
+        String str2="tt08980000000883$08980000000883$oss2";
+        String str3="tt08980000000705$08980000000705$oss3";
+        String str4="tt089800000001$089800000001$oss4";
+        String str5="tt08980000001281$08980000001281$oss5";
+        String str6="tt08980000003733$08980000003733$oss6";
+        String str7="tt08980000006805$08980000006805$oss7";
+        String str8="tt08980000009386$08980000009386$oss8";
         list.add(str1);
         list.add(str2);
         list.add(str3);

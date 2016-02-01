@@ -2,8 +2,6 @@ package com.watchme.ad.bean;
 
 import java.io.Serializable;
 
-import com.watchme.ad.util.DataType;
-
 
 public class MessageToRedis implements Serializable{
 	private static final long serialVersionUID = 1L;

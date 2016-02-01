@@ -1,7 +1,6 @@
 package com.watchme.ad.topology;
 
 import com.watchme.ad.bolt.AdEsperBolt;
-import com.watchme.ad.bolt.AdGet2RedisBolt;
 import com.watchme.ad.bolt.AdGet2RedisCloudBolt;
 import com.watchme.ad.bolt.AdRulesBolt;
 import com.watchme.ad.bolt.AdSortBolt;
@@ -19,7 +18,6 @@ import backtype.storm.utils.Utils;
 public class AdTopology2 {
 
 	private static AdSpout ADSPOUT = new AdSpout();
-	private static AdGet2RedisBolt ADGET2REDISBOLT = new AdGet2RedisBolt();
 	private static AdGet2RedisCloudBolt ADGET2REDISCLOUDBOLT = new AdGet2RedisCloudBolt();
 	private static AdSortBolt ADSORTBOLT = new AdSortBolt();
 	private static AdEsperBolt ADESPERBOLT = new AdEsperBolt();

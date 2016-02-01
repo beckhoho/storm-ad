@@ -2,42 +2,31 @@ package com.watchme.ad.bean;
 
 import java.io.Serializable;
 
-public class AdPolicy implements Serializable {
+/**
+ * 
+ * @author suzg
+ * @description 广告策略bean
+ *
+ */
+public class AdPBean implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
-	private String groupId;// 用户组ID
-	private String adId;// 广告ID
 	private String pid;// 策略ID
-	private String demandId;// 需求ID
-
 	private int dayPutNum;// 当天投放总次数
+	private String demandId;// 需求ID
 	private String domainGroup;// 域组
 	private String domainLimit;// 域限制
-	private String putStartDate;// 开始时间
+	private int priority;// 优先级
 	private String putEndDate;// 结束时间
 	private int putInterval;// 间隔
 	private String putMode;// 投放类型
 	private int putNum;// 投放总次数
-	private int priority;// 优先级
-	private String type;// 类型1：CP 2：移动（待定）
-	private String url;// URL
-	private int order;// 排序
-
-	public String getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(String groupId) {
-		this.groupId = groupId;
-	}
-
-	public String getAdId() {
-		return adId;
-	}
-
-	public void setAdId(String adId) {
-		this.adId = adId;
-	}
+	private String putStartDate;// 开始时间
+	private String groupId;// 用户组ID
+	private String adId;// 广告ID
+	private String type;// 类型1：cp 2：移动（待定）
+	private String url;// url
 
 	public String getPid() {
 		return pid;
@@ -47,20 +36,20 @@ public class AdPolicy implements Serializable {
 		this.pid = pid;
 	}
 
-	public String getDemandId() {
-		return demandId;
-	}
-
-	public void setDemandId(String demandId) {
-		this.demandId = demandId;
-	}
-
 	public int getDayPutNum() {
 		return dayPutNum;
 	}
 
 	public void setDayPutNum(int dayPutNum) {
 		this.dayPutNum = dayPutNum;
+	}
+
+	public String getDemandId() {
+		return demandId;
+	}
+
+	public void setDemandId(String demandId) {
+		this.demandId = demandId;
 	}
 
 	public String getDomainGroup() {
@@ -79,20 +68,12 @@ public class AdPolicy implements Serializable {
 		this.domainLimit = domainLimit;
 	}
 
-	public String getPutStartDate() {
-		return putStartDate;
+	public int getPriority() {
+		return priority;
 	}
 
-	public void setPutStartDate(String putStartDate) {
-		this.putStartDate = putStartDate;
-	}
-
-	public String getPutEndDate() {
-		return putEndDate;
-	}
-
-	public void setPutEndDate(String putEndDate) {
-		this.putEndDate = putEndDate;
+	public void setPriority(int priority) {
+		this.priority = priority;
 	}
 
 	public int getPutInterval() {
@@ -119,12 +100,20 @@ public class AdPolicy implements Serializable {
 		this.putNum = putNum;
 	}
 
-	public int getPriority() {
-		return priority;
+	public String getGroupId() {
+		return groupId;
 	}
 
-	public void setPriority(int priority) {
-		this.priority = priority;
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
+	}
+
+	public String getAdId() {
+		return adId;
+	}
+
+	public void setAdId(String adId) {
+		this.adId = adId;
 	}
 
 	public String getType() {
@@ -143,12 +132,20 @@ public class AdPolicy implements Serializable {
 		this.url = url;
 	}
 
-	public int getOrder() {
-		return order;
+	public String getPutEndDate() {
+		return putEndDate;
 	}
 
-	public void setOrder(int order) {
-		this.order = order;
+	public void setPutEndDate(String putEndDate) {
+		this.putEndDate = putEndDate;
+	}
+
+	public String getPutStartDate() {
+		return putStartDate;
+	}
+
+	public void setPutStartDate(String putStartDate) {
+		this.putStartDate = putStartDate;
 	}
 
 }

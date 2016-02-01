@@ -1,8 +1,6 @@
-package com.watchme.ad.util;
+package com.watchme.ad.bean;
 
 import java.util.Comparator;
-
-import com.watchme.ad.bean.AdPolicy;
 
 public class AdComparator<T> implements Comparator<T> {
 

@@ -7,10 +7,11 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.esotericsoftware.jsonbeans.Json;
+import com.watchme.ad.bean.AdPBean;
 import com.watchme.ad.bean.AdPolicy;
 import com.watchme.ad.bean.UserAdPolicy;
-import com.watchme.ad.util.JedisUtil;
-import com.watchme.ad.util.SerializationUtil;
+import com.watchme.ad.util.JedisUtils;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -19,7 +20,6 @@ import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
-import redis.clients.jedis.Jedis;
 
 /**
  * 从redis获取数据
@@ -32,14 +32,12 @@ public class AdGet2RedisCloudBolt extends BaseRichBolt {
 	private static final long serialVersionUID = 1L;
 	public static final String AD_ENTRY = "str";
 	Logger logger = LoggerFactory.getLogger(AdGet2RedisCloudBolt.class);
-	
-	private Jedis jedis;
+
 	private OutputCollector collector;
 
 	@Override
 	public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
 		this.collector = collector;
-		this.jedis = JedisUtil.getPool("192.168.75.131", 6379).getResource();
 	}
 
 	@Override
@@ -52,27 +50,8 @@ public class AdGet2RedisCloudBolt extends BaseRichBolt {
 		data = data.trim();
 		if (!"".equals(data) && data != null) {
 
-			UserAdPolicy userAdPolicy = new UserAdPolicy();
-			List<AdPolicy> adPolicyList = new ArrayList<AdPolicy>();
-
-			String[] values = data.split("\\$");
-			String curId = values[0]; // 唯一流水
-			String userId = values[1]; // 用户名
-			
-			System.out.println("userId = "+userId+" , userId.getBytes = "+userId.getBytes());
-			
-			byte[] bs = jedis.get(userId.getBytes());		
-			adPolicyList = (List<AdPolicy>) SerializationUtil.deserialize(bs);
-			userAdPolicy.setCurId(curId);
-			userAdPolicy.setUserId(userId);
-			userAdPolicy.setAdPolicyList(adPolicyList);
-			
-			System.out.println("=======================原始数据============================");
-			for (int i = 0; i < adPolicyList.size(); i++) {
-				System.out.println("计数=" + i + ",内容：userId=" + userId + ",putNum=" + adPolicyList.get(i).getPutNum()
-						+ ",dayPutNum=" + adPolicyList.get(i).getDayPutNum() + ",url=" + adPolicyList.get(i).getUrl());
-			}
-			System.out.println("=======================原始数据============================");
+			// 拼装用户广告信息
+			UserAdPolicy userAdPolicy = getuserAdPolicy(data);
 
 			collector.emit(new Values(userAdPolicy));
 
@@ -91,6 +70,69 @@ public class AdGet2RedisCloudBolt extends BaseRichBolt {
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		declarer.declare(new Fields(AD_ENTRY));
 
+	}
+	
+	/**
+	 * 获取用户广告策略信息
+	 * @param data
+	 * @return
+	 */
+	private UserAdPolicy getuserAdPolicy(String data) {
+		UserAdPolicy userAdPolicy = new UserAdPolicy();
+		List<AdPolicy> adPolicyList = new ArrayList<AdPolicy>();
+		Json json = new Json();
+
+		String[] values = data.split("\\$");
+		String curNumber = values[0]; // 唯一流水
+		String serialNumber = values[1]; // 用户流水
+
+		System.out.println("serialNumber = " + serialNumber);
+
+		/**
+		 * 第一步：根据用户流水获取组信息 第二步：再根据用户组获取广告策略信息
+		 * 
+		 */
+		List<String> groupIds = JedisUtils.getList(serialNumber);
+		for (String groupId : groupIds) {
+			// 获取广告策略信息
+			List<String> AdPJsonStrs = JedisUtils.getList(groupId);
+			for (String AdPJsonStr : AdPJsonStrs) {
+				AdPolicy adPolicy = new AdPolicy();
+				// 转成对象
+				AdPBean adPBean = json.fromJson(AdPBean.class, AdPJsonStr);
+
+				adPolicy.setAdId(adPBean.getAdId());
+				adPolicy.setDayPutNum(adPBean.getDayPutNum());
+				adPolicy.setDemandId(adPBean.getDemandId());
+				adPolicy.setDomainGroup(adPBean.getDomainGroup());
+				adPolicy.setDomainLimit(adPBean.getDomainLimit());
+				adPolicy.setGroupId(adPBean.getGroupId());
+				adPolicy.setPid(adPBean.getPid());
+				adPolicy.setPriority(adPBean.getPriority());
+				adPolicy.setPutEndDate(adPBean.getPutEndDate());
+				adPolicy.setPutInterval(adPBean.getPutInterval());
+				adPolicy.setPutMode(adPBean.getPutMode());
+				adPolicy.setPutNum(adPBean.getPutNum());
+				adPolicy.setPutStartDate(adPBean.getPutStartDate());
+				adPolicy.setType(adPBean.getType());
+				adPolicy.setUrl(adPBean.getUrl());
+
+				adPolicyList.add(adPolicy);
+			}
+		}
+		userAdPolicy.setCurNumber(curNumber);
+		userAdPolicy.setSerialNumber(serialNumber);
+		userAdPolicy.setAdPolicyList(adPolicyList);
+
+		System.out.println("=======================原始数据============================");
+		for (int i = 0; i < adPolicyList.size(); i++) {
+			System.out.println("计数=" + i + ",内容：serialNumber=" + serialNumber + ",putNum="
+					+ adPolicyList.get(i).getPutNum() + ",dayPutNum=" + adPolicyList.get(i).getDayPutNum() + ",url="
+					+ adPolicyList.get(i).getUrl());
+		}
+		System.out.println("=======================原始数据============================");
+
+		return userAdPolicy;
 	}
 
 }

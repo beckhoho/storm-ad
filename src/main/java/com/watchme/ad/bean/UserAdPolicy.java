@@ -4,32 +4,32 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserAdPolicy implements Serializable{
+public class UserAdPolicy implements Serializable {
 	private static final long serialVersionUID = 1L;
 	// 唯一标识
-	private String curId;
-	// 用户名
-	private String userId;
+	private String curNumber;
+	// 用户流水
+	private String serialNumber;
 	// 是否投放过广告
 	private boolean pushFlag;
 	// 广告策略LIST
 	private List<AdPolicy> adPolicyList;
 	private List<MessageToRedis> messagesToRedis = new ArrayList<MessageToRedis>();
 
-	public String getCurId() {
-		return curId;
+	public String getCurNumber() {
+		return curNumber;
 	}
 
-	public void setCurId(String curId) {
-		this.curId = curId;
+	public void setCurNumber(String curNumber) {
+		this.curNumber = curNumber;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getSerialNumber() {
+		return serialNumber;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
 	}
 
 	public boolean isPushFlag() {

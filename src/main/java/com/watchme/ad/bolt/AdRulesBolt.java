@@ -44,7 +44,7 @@ public class AdRulesBolt extends BaseRichBolt {
 		
 		UserAdPolicy userAdPolicy = (UserAdPolicy) input.getValues().get(0);
 		if (!"".equals(userAdPolicy) && userAdPolicy != null) {
-			System.out.println("AdRuleBolt:CurId="+userAdPolicy.getCurId());
+			System.out.println("AdRuleBolt:CurNumber="+userAdPolicy.getCurNumber());
 			try {
 				kSession.insert(userAdPolicy);
 				kSession.fireAllRules();

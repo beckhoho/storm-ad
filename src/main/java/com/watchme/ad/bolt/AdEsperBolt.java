@@ -68,7 +68,7 @@ public class AdEsperBolt extends BaseRichBolt {
 		epService = EPServiceProviderManager.getDefaultProvider(configuration);
 		epService.initialize();
 
-		String epl = "select curId, userId, adPolicyList from UserAdPolicy.win:length_batch(1)";
+		String epl = "select curNumber, serialNumber, adPolicyList from UserAdPolicy.win:length_batch(1)";
 
 		EPStatement visitorsStatement = epService.getEPAdministrator().createEPL(epl);
 		visitorsStatement.addListener(new UpdateListener() {

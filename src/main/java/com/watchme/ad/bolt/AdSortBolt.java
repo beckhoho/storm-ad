@@ -7,9 +7,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.watchme.ad.bean.AdComparator;
 import com.watchme.ad.bean.AdPolicy;
 import com.watchme.ad.bean.UserAdPolicy;
-import com.watchme.ad.util.AdComparator;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;

@@ -3,7 +3,7 @@ package com.watchme.drools_esper.ad;
 import com.watchme.ad.bean.UserAdPolicy;
 import com.watchme.ad.bean.AdPolicy;
 import com.watchme.ad.bean.MessageToRedis;
-import com.watchme.ad.util.DataType;
+import com.watchme.ad.bean.DataType;
 import java.util.List;
 
 rule "ad-tactics"
@@ -16,6 +16,6 @@ rule "ad-tactics"
 	then
 		$userAdPolicy.setPushFlag(true);
 		List<MessageToRedis> redisRecords = $userAdPolicy.getMessagesToRedis();
-		redisRecords.add(new MessageToRedis($userAdPolicy.getCurId(),$adPolicy.getUrl(),DataType.STRING));
+		redisRecords.add(new MessageToRedis($userAdPolicy.getCurNumber(),$adPolicy.getUrl(),DataType.STRING));
 		update($userAdPolicy);
 end

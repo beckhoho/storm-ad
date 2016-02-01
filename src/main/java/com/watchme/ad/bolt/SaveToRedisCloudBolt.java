@@ -7,14 +7,13 @@ import org.slf4j.Logger;
 
 import com.watchme.ad.bean.MessageToRedis;
 import com.watchme.ad.bean.UserAdPolicy;
-import com.watchme.ad.util.JedisUtil;
+import com.watchme.ad.util.JedisServer;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Tuple;
-import redis.clients.jedis.Jedis;
 
 public class SaveToRedisCloudBolt extends BaseRichBolt {
 
@@ -22,45 +21,12 @@ public class SaveToRedisCloudBolt extends BaseRichBolt {
 
 	private static final Logger logger = org.slf4j.LoggerFactory.getLogger(SaveToRedisCloudBolt.class);
 	private static final String AD_ENTRY = "str";
-	private int expireTime = 3600 * 24 * 1;// 過期時間 1天
 	private OutputCollector collector;
 
-	private Jedis jedis;
-
-	public void insertToRedis(List<MessageToRedis> redisRecords) throws Exception {
-		for (MessageToRedis message : redisRecords) {
-			String key = message.getKey();
-			try {
-				switch (message.getType()) {
-				case LONG:
-					jedis.incrBy(key, Long.parseLong(message.getValue()));
-					break;
-				case STRING:
-					jedis.set(key, message.getValue());
-					break;
-				case SET:
-					jedis.zadd(key, Double.parseDouble(message.getValue()), message.getValue());
-					break;
-				default:
-					break;
-				}
-				jedis.expire(key, expireTime);
-			} catch (Exception e) {
-				throw new Exception(e.getMessage() + " (error message is：" + message + ")");
-			} finally {
-
-			}
-		}
-	}
-
-	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-
-	}
-
+	
 	@Override
 	public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
 		this.collector = collector;
-		this.jedis = JedisUtil.getPool("192.168.75.131", 6379).getResource();
 	}
 
 	@Override
@@ -88,6 +54,29 @@ public class SaveToRedisCloudBolt extends BaseRichBolt {
 			collector.ack(input);
 		}
 
+	}
+	
+	public void declareOutputFields(OutputFieldsDeclarer declarer) {
+
+	}
+
+	private void insertToRedis(List<MessageToRedis> redisRecords) throws Exception {
+		for (MessageToRedis message : redisRecords) {
+			String key = message.getKey();
+			try {
+				switch (message.getType()) {
+				case STRING:
+					JedisServer.hsetItem(0, "adURL", key, message.getValue().getBytes());
+					break;
+				default:
+					break;
+				}
+			} catch (Exception e) {
+				throw new Exception(e.getMessage() + " (error message is：" + message + ")");
+			} finally {
+
+			}
+		}
 	}
 
 }
